@@ -7,14 +7,14 @@ const app = express();
 const server = http.createServer(app);
 const socketIO = require("socket.io");
 const io = socketIO.listen(server);
-const PORT = 1488;
+const PORT = 5000;
 const connections = [];
 const rooms = {};
 app.get("/", (req, res) => {
     res.end("<h1>Hello bruh</h1>");
 });
-server.listen(PORT, () => {
-    console.log(`Server has been started on ${chalk.rgb(93, 95, 255)("http://localhost:1488")}`);
+server.listen(5000, () => {
+    console.log(`Server has been started on ${chalk.rgb(93, 95, 255)("http://localhost:5000")}`);
 });
 io.sockets.on("connection", (socket) => {
     connections.push(socket);
