@@ -20,7 +20,7 @@ io.sockets.on("connection", (socket) => {
     connections.push(socket);
     console.log(`Connected: ${connections.length} sockets connected`);
     socket.on("disconnect", (data) => {
-        connections?.splice(connections.indexOf(socket), 1);
+        connections.splice(connections.indexOf(socket), 1);
         rooms[socket.room]?.users.splice(rooms[socket.room].users?.indexOf(socket), 1);
         console.log(`Disconnected: ${connections.length} sockets connected.`);
         if (rooms[socket.room]?.users?.length === 0) {
