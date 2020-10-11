@@ -13,7 +13,7 @@ const rooms = {};
 app.get("/", (req, res) => {
     res.end("<h1>Hello bruh</h1>");
 });
-server.listen(5000, () => {
+server.listen(process.env.PORT || 5000, () => {
     console.log(`Server has been started on ${chalk.rgb(93, 95, 255)("http://localhost:5000")}`);
 });
 io.sockets.on("connection", (socket) => {
