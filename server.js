@@ -20,19 +20,19 @@ io.sockets.on("connection", (socket) => {
     connections.push(socket);
     console.log(`Connected: ${connections.length} sockets connected`);
     socket.on("disconnect", (data) => {
-        connections.splice(connections.indexOf(socket), 1);
-        rooms[socket.room]?.users.splice(rooms[socket.room].users?.indexOf(socket), 1);
+        connections && connections.splice(connections.indexOf(socket), 1);
+        rooms[socket.room] && rooms[socket.room].users.splice(rooms[socket.room].users.indexOf(socket), 1);
         console.log(`Disconnected: ${connections.length} sockets connected.`);
-        if (rooms[socket.room]?.users?.length === 0) {
+        if (rooms[socket.room] && rooms[socket.room].users && rooms[socket.room].users.length === 0) {
             delete rooms[socket.room];
         }
-        rooms[socket.room]?.sockets.emit("send users", {
-            usersList: rooms[socket.room]?.users?.map((user) => ({
+        rooms[socket.room] && rooms[socket.room].sockets.emit("send users", {
+            usersList: rooms[socket.room].users.map((user) => ({
                 id: user.uid,
                 name: user.name,
             })),
         });
-        rooms[socket.room]?.sockets.emit("new msg", {
+        rooms[socket.room] && rooms[socket.room].sockets.emit("new msg", {
             text: `${socket.name} left chat.`,
             infoId: socket.uid,
         });
@@ -42,32 +42,32 @@ io.sockets.on("connection", (socket) => {
         socket.room = room;
         socket.uid = id;
         if (socket.room in rooms) {
-            rooms[socket.room]?.users.push(socket);
+            rooms[socket.room] && rooms[socket.room].users.push(socket);
         }
         else {
             rooms[socket.room] = {
                 users: [socket],
                 sockets: {
                     emit: function (event, data) {
-                        rooms[socket.room]?.users.forEach((user) => user.emit(event, data));
+                        rooms[socket.room] && rooms[socket.room].users.forEach((user) => user.emit(event, data));
                     },
                 },
             };
         }
         /* socket.emit("get id", { idUser: socket.uid }); */
-        rooms[socket.room]?.sockets.emit("send users", {
-            usersList: rooms[socket.room]?.users?.map((user) => ({
+        rooms[socket.room] && rooms[socket.room].sockets.emit("send users", {
+            usersList: rooms[socket.room].users.map((user) => ({
                 id: user.uid,
                 name: user.name,
             })),
         });
-        rooms[socket.room]?.sockets.emit("new msg", {
+        rooms[socket.room] && rooms[socket.room].sockets.emit("new msg", {
             text: `${socket.name} joined to chat.`,
             infoId: socket.uid,
         });
     });
     socket.on("send msg", ({ message }) => {
-        rooms[socket.room]?.sockets.emit("new msg", {
+        rooms[socket.room] && rooms[socket.room].sockets.emit("new msg", {
             senderId: socket.uid,
             senderName: socket.name,
             text: message,
